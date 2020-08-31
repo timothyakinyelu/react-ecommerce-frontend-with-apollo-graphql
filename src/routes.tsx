@@ -1,58 +1,18 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import AdminLogin from './Admin/pages/Auth/AdminLogin';
-import Home from './Shop/pages/Home';
+import Login from './pages/Auth/Login';
 // import { useQuery, gql } from '@apollo/client';
-import Dashboard from './Admin/pages/Dashboard';
+import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
 
 const Routes: React.FC = (): JSX.Element => {
     return (
         <Switch>
-            <Route exact path="/" component={ShopComponent} />
-            <Route path="/admin" component={AdminComponent} />
+            <Route exact path="/" component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/dashboard" component={Dashboard} />
         </Switch>
-    );
-};
-
-const AdminComponent = () => {
-    // const IS_LOGGED_IN = gql`
-    //     query IsUserLoggedIn {
-    //         isLoggedIn @client
-    //     }
-    // `;
-
-    // const IsLoggedIn = () => {
-    //     const { data } = useQuery(IS_LOGGED_IN);
-    //     console.log(data);
-    //     return data.isLoggedIn ? (
-    //         <Fragment>
-    //             <Switch>
-    //                 <Route exact path="/admin" component={Dashboard} />
-    //             </Switch>
-    //         </Fragment>
-    //     ) : (
-    //         <Route exact path="/admin/login" component={AdminLogin} />
-    //     );
-    // };
-
-    return (
-        <Fragment>
-            <Route exact path="/admin/login" component={AdminLogin} />
-            <Switch>
-                <Route exact path="/admin" component={Dashboard} />
-            </Switch>
-        </Fragment>
-    );
-};
-
-const ShopComponent = () => {
-    return (
-        <Fragment>
-            <Switch>
-                <Route exact path="/" component={Home} />
-            </Switch>
-        </Fragment>
     );
 };
 
