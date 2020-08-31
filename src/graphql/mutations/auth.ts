@@ -16,3 +16,12 @@ export const LOGIN_USER = gql`
         }
     }
 `;
+
+export const REFRESH_TOKEN = gql`
+    mutation RefreshToken {
+        refreshToken {
+            access_token
+            expires_in
+        }
+    }
+`;
