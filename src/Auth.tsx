@@ -23,8 +23,6 @@ const Auth: React.FC = (props): JSX.Element => {
                     user: login.user,
                 },
             });
-
-            window.location.reload(false);
         },
     });
 
