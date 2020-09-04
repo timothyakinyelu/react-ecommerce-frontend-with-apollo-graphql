@@ -1,9 +1,18 @@
 import React from 'react';
 
 import Routes from './routes';
+import { ApolloProvider } from '@apollo/client';
+import { client } from './config';
+import Auth from './Auth';
 
 function App(): JSX.Element {
-    return <Routes />;
+    return (
+        <ApolloProvider client={client}>
+            <Auth>
+                <Routes />
+            </Auth>
+        </ApolloProvider>
+    );
 }
 
 export default App;
