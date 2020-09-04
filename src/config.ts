@@ -1,29 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { InMemoryCache, HttpLink, fromPromise, ApolloClient, NormalizedCacheObject, from } from '@apollo/client';
-import authHelper from './authHelper';
+import { InMemoryCache, HttpLink, ApolloClient, NormalizedCacheObject, fromPromise, concat } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { REFRESH_TOKEN } from './graphql/mutations/auth';
 import { IS_LOGGED_IN } from './graphql/query/auth';
 import { typeDefs } from './graphql/resolvers';
+import __url__ from './__url__';
+import authHelper from './authHelper';
+import { setContext } from '@apollo/client/link/context';
 
 const cache = new InMemoryCache();
-const token = authHelper.get();
-const checked = authHelper.isChecked(token || '');
 
-// check if token has expired and then send header without bearer
 const httpLink = new HttpLink({
-    uri: 'http://localhost:8000/graphql',
-    headers: {
-        authorization: checked ? 'Bearer ' + token : token,
-        accept: 'application/json',
-        // Cookie: localStorage.getItem('cookie'),
-    },
+    uri: __url__.baseUrl(),
     credentials: 'include',
 });
 
-// let apolloClient: ApolloClient<unknown>;
+const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem('token');
+    const checked = authHelper.isChecked(token || '');
+
+    // return the headers to the context so httpLink can read them
+    return {
+        headers: {
+            ...headers,
+            authorization: checked ? `Bearer ${token}` : token,
+        },
+    };
+});
+
 let isRefreshing = false;
 let pendingRequests: Array<any> = [];
+
+const setIsRefreshing = (value: boolean) => {
+    isRefreshing = value;
+};
+
+const addPendingRequests = (pendingRequest: any) => {
+    pendingRequests.push(pendingRequest);
+};
 
 const resolvePendingRequests = () => {
     pendingRequests.map((callback: () => any) => callback());
@@ -32,62 +47,73 @@ const resolvePendingRequests = () => {
 
 const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
-        for (const err of graphQLErrors) {
-            // handle error based on its code
-            switch (err.extensions?.code) {
-                case 401:
-                    let forward$;
+        // for (const err of graphQLErrors) {
+        const err = graphQLErrors[0];
+        // handle error based on its code
+        switch (err.extensions?.code) {
+            case 401:
+                // let forward$;
+                let forward$;
 
-                    if (!isRefreshing) {
-                        isRefreshing = true;
-                        forward$ = fromPromise(
-                            getNewToken()
-                                .then((access_token) => {
-                                    resolvePendingRequests();
-                                    localStorage.setItem('token', access_token);
-                                })
-                                .catch((error: any) => {
-                                    console.log(error);
-                                    return pendingRequests;
-                                })
-                                .finally(() => {
-                                    return isRefreshing;
-                                }),
-                        ).filter((value) => Boolean(value));
-                    } else {
-                        forward$ = fromPromise(
-                            new Promise((resolve) => {
-                                pendingRequests.push(() => resolve());
+                if (!isRefreshing) {
+                    setIsRefreshing(true);
+                    forward$ = fromPromise(
+                        getNewToken()
+                            .then((access_token: string) => {
+                                // Store the new tokens for your auth link
+                                resolvePendingRequests();
+                                return access_token;
+                            })
+                            .catch((error: any) => {
+                                console.log(error);
+                                addPendingRequests([]);
+                                // Handle token refresh errors e.g clear stored tokens, redirect to login, ...
+                                return;
+                            })
+                            .finally(() => {
+                                setIsRefreshing(false);
                             }),
-                        );
-                    }
+                    ).filter((value) => Boolean(value));
+                } else {
+                    // Will only emit once the Promise is resolved
+                    forward$ = fromPromise(
+                        new Promise((resolve) => {
+                            addPendingRequests(() => resolve());
+                        }),
+                    );
+                }
 
-                    return forward$.flatMap(() => forward(operation));
-            }
+                return forward$.flatMap(() => forward(operation));
         }
+        // }
     }
     if (networkError) {
         console.log(`[Network error]: ${networkError}`);
     }
 });
 
-const getNewToken = () => {
+export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+    cache,
+    link: concat(errorLink, concat(authLink, httpLink)),
+    typeDefs,
+});
+
+export const getNewToken = (): any => {
     return client.mutate({ mutation: REFRESH_TOKEN }).then((response) => {
         const { access_token } = response.data.refreshToken;
+        localStorage.removeItem('token');
+
+        localStorage.setItem('token', access_token);
+
         return access_token;
     });
 };
-
-export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-    cache,
-    link: from([errorLink, httpLink]),
-    typeDefs,
-});
 
 cache.writeQuery({
     query: IS_LOGGED_IN,
     data: {
         isLoggedIn: !!localStorage.getItem('token'),
         user: JSON.parse(localStorage.getItem('user') || '{}'),
+        token: localStorage.getItem('token'),
     },
 });
