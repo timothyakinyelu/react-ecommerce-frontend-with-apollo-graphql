@@ -1,0 +1,45 @@
+.navbar {
+    height: 5em;
+    background-color: #ffffff;
+    /* position: sticky;
+    top: 0;
+    z-index: 1020; */
+    position: fixed;
+    top: 0;
+    z-index: 1020;
+    right: 0;
+    width: 48.55em;
+    justify-content: flex-end;
+}
+nav .logo {
+    z-index: 999;
+}
+.navbar-icons {
+    display: inline-flex;
+    margin-top: -23px;
+    position: relative;
+    top: 10px;
+}
+.navbar-icons li {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.search-box {
+    align-self: center;
+}
+span.brand {
+    display: none;
+}
+/* @media (min-width: 42em) {
+    span.brand {
+        display: none;
+    }
+} */
+@media (min-width: 68em) {
+    .navbar {
+        width: 65em;
+    }
+    span.brand {
+        display: block;
+    }
+}

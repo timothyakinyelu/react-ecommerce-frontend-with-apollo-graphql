@@ -60,7 +60,7 @@ h2{
     margin-bottom: 47px;
     margin-top: 20px;
     font-family: Montserrat, 'sans-serif';
-    font-size: x-large;
+    font-size: 2em;
 }
 .input-border{
     width: 100%;
@@ -107,6 +107,10 @@ label{
     left: 0;
     color: #203dac;
     font-size: 14px;
+}
+.button-div {
+    margin-top: 45px;
+    margin-bottom: 20px;
 }
 .btn{
     width: 40%;
@@ -171,6 +175,17 @@ label{
     left: 0;
     top: 48%;
     transform: translateY(-50%);
+}
+input.password:not(:placeholder-shown) ~ span.show-hide {
+    display: none;
+}
+input.password:valid ~ span.show-hide {
+    display: block;
+}
+span.show-hide {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 .login100-social-item {
     font-size: 18px;
