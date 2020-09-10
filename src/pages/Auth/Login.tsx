@@ -7,6 +7,9 @@ import { AuthConsumer } from '../../authContext';
 function Login(): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [hidden, setHidden] = useState<boolean>(true);
+    const [eye, setEye] = useState<boolean>(true);
+    // const [show, setShow] = useState<boolean>(false);
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setEmail(e.target.value);
@@ -14,6 +17,13 @@ function Login(): JSX.Element {
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setPassword(e.target.value);
+        // setShow(true);
+    };
+
+    const toggleShow = (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {
+        e.preventDefault();
+        setHidden(!hidden);
+        setEye(!eye);
     };
 
     return (
@@ -26,7 +36,7 @@ function Login(): JSX.Element {
                                 handleAuthentication(e, email, password);
                             }}
                         >
-                            <h2>Admin Log In</h2>
+                            <h2>Log In</h2>
                             <div className="input-border">
                                 <input
                                     type="text"
@@ -42,23 +52,33 @@ function Login(): JSX.Element {
 
                             <div className="input-border">
                                 <input
-                                    type="password"
+                                    type={hidden ? 'password' : 'text'}
                                     data-testid="password-input"
                                     value={password}
-                                    className="text"
+                                    className="text password"
                                     required
+                                    pattern=".*\S.*"
                                     onChange={handlePasswordChange}
                                 />
+                                {/* {show && ( */}
+                                <span className="show-hide">
+                                    {eye ? (
+                                        <i className="mdi mdi-eye-outline" onClick={toggleShow}></i>
+                                    ) : (
+                                        <i className="mdi mdi-eye-off-outline" onClick={toggleShow}></i>
+                                    )}
+                                </span>
+                                {/* )} */}
                                 <label>Password</label>
                                 <div className="border"></div>
                             </div>
-                            <div className="remember-form-checkbox m-l-4">
+                            {/* <div className="remember-form-checkbox m-l-4">
                                 <input className="input-checkbox100" id="ckb1" type="checkbox" name="remember-me" />
                                 <label className="label-checkbox100" htmlFor="ckb1">
                                     Remember me
                                 </label>
-                            </div>
-                            <div className="flex items-center justify-between">
+                            </div> */}
+                            <div className="button-div flex items-center justify-between">
                                 <button className="btn" type="submit">
                                     Sign In
                                 </button>
