@@ -38,3 +38,14 @@ interface LoginResponse {
     tokens: AuthPayload;
     user: User;
 }
+
+interface Toast {
+    id: number;
+    title: string;
+    message: string;
+    backgroundColor: string;
+}
+
+interface ToastState {
+    toasts: Toast[];
+}
