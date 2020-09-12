@@ -70,6 +70,7 @@ a {
     left: 4em;
     transform: translateY(-50%);
     display: none;
+    font-size: 0.9em;
 }
 .s-sidebar__nav li:hover .s-sidebar__nav-link{
     background: #fff;
@@ -122,10 +123,11 @@ a {
 	position: relative;
 }
 .s-sidebar__nav ul ul li a {
-    height: 4em;
+    height: 2em;
     padding: 1.2em;
     display: inline-block;
     color: #4f28f0;
+    font-size: 0.9em;
 }
   
   /* Mobile First */
