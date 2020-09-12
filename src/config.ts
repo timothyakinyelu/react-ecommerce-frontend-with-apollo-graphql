@@ -1,14 +1,49 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { InMemoryCache, HttpLink, ApolloClient, NormalizedCacheObject, fromPromise, concat } from '@apollo/client';
+import {
+    InMemoryCache,
+    HttpLink,
+    ApolloClient,
+    NormalizedCacheObject,
+    fromPromise,
+    concat,
+    defaultDataIdFromObject,
+} from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { REFRESH_TOKEN } from './graphql/mutations/auth';
 import { IS_LOGGED_IN } from './graphql/query/auth';
-import { typeDefs } from './graphql/resolvers';
+import { typeDefs, resolvers } from './graphql/resolvers';
 import __url__ from './__url__';
 import authHelper from './authHelper';
 import { setContext } from '@apollo/client/link/context';
+import { GET_TOASTS } from './graphql/query/toast';
 
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({
+    dataIdFromObject: (object) => {
+        switch (object.__typename) {
+            case 'Toast':
+                return `Toast:${object.id}`;
+            default:
+                return defaultDataIdFromObject(object);
+        }
+    },
+    typePolicies: {
+        Query: {
+            keyFields: ['toasts'],
+            fields: {
+                toasts: {
+                    merge: false,
+                },
+            },
+        },
+        Mutation: {
+            fields: {
+                addOrRemoveToast: {
+                    merge: false,
+                },
+            },
+        },
+    },
+});
 
 const httpLink = new HttpLink({
     uri: __url__.baseUrl(),
@@ -49,6 +84,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
     if (graphQLErrors) {
         // for (const err of graphQLErrors) {
         const err = graphQLErrors[0];
+
         // handle error based on its code
         switch (err.extensions?.code) {
             case 401:
@@ -96,6 +132,7 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     cache,
     link: concat(errorLink, concat(authLink, httpLink)),
     typeDefs,
+    resolvers,
 });
 
 export const getNewToken = (): any => {
@@ -114,6 +151,12 @@ cache.writeQuery({
     data: {
         isLoggedIn: !!localStorage.getItem('token'),
         user: JSON.parse(localStorage.getItem('user') || '{}'),
-        token: localStorage.getItem('token'),
+    },
+});
+
+cache.writeQuery({
+    query: GET_TOASTS,
+    data: {
+        toasts: [],
     },
 });
