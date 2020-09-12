@@ -8,7 +8,7 @@
     top: 0;
     z-index: 1020;
     right: 0;
-    width: 48.55em;
+    width: calc(100% - 4em);
     justify-content: flex-end;
 }
 nav .logo {
@@ -31,13 +31,13 @@ span.brand {
     display: none;
 }
 /* @media (min-width: 42em) {
-    span.brand {
-        display: none;
+    .navbar {
+        width: calc(100% - 5em);
     }
 } */
 @media (min-width: 68em) {
     .navbar {
-        width: 65em;
+        width: calc(100% - 15em);
     }
     span.brand {
         display: block;

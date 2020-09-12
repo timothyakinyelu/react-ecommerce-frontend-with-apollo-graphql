@@ -61,16 +61,15 @@
     text-overflow: ellipsis;
 }
 .profile-dropdown ul {
-    display: none;
     list-style: none;
-    padding: 0;
-    margin: 0;
+    padding: 10px;
     background: #fff;
     position: absolute;
     top: 100%;
     right: 0;
     width: 100%;
-    border-radius: 3px;
+    border: 1px solid #cbd5e0;
+    border-radius: 1em;
 }
 .profile-dropdown ul li a {
     display: block;
@@ -148,6 +147,7 @@ p.subtitle {
     .profile-dropdown > label {
         position: relative;
         padding: 0.9rem;
+        visibility: visible;
     }
 }
 @media (min-width: 68em) {
@@ -158,6 +158,6 @@ p.subtitle {
         color: #b2b2b2;
         font-size: 1.75rem;
         position: relative;
-        top: -18px;
+        top: -20px;
     }
 }
