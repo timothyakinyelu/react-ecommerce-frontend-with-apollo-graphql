@@ -39,12 +39,13 @@ const Login: React.FC = (): JSX.Element => {
                             <h2>Log In</h2>
                             <div className="input-border">
                                 <input
-                                    type="text"
+                                    type="email"
                                     data-testid="login-input"
                                     value={email}
                                     className="text"
                                     required
                                     onChange={handleEmailChange}
+                                    autoFocus
                                 />
                                 <label>Email</label>
                                 <div className="border"></div>

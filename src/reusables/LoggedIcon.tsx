@@ -23,7 +23,7 @@ const LoggedIcon: React.FC<LoggedProps> = ({ user }): JSX.Element => {
                         {user.first_name} {user.last_name}
                     </span>
                     <label htmlFor="profile2">
-                        <i className="mdi mdi-menu"></i>
+                        <i className="mdi mdi-chevron-down"></i>
                     </label>
                     {show && (
                         <ul>
