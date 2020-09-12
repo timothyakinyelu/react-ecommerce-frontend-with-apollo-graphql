@@ -23,13 +23,22 @@ const SideBar: React.FC = (): JSX.Element => {
                         </a>
                         <ul>
                             <li>
-                                <a href="#">Themes</a>
+                                <a href="#">Brands</a>
                             </li>
                             <li>
-                                <a href="#">Plugins</a>
+                                <a href="#">Categories</a>
                             </li>
                             <li>
-                                <a href="#">Tutorials</a>
+                                <a href="#">Products</a>
+                            </li>
+                            <li>
+                                <a href="#">Product Reviews</a>
+                            </li>
+                            <li>
+                                <a href="#">Product Tags</a>
+                            </li>
+                            <li>
+                                <a href="#">Attributes</a>
                             </li>
                         </ul>
                     </li>
