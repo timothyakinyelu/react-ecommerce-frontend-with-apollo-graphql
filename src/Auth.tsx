@@ -6,12 +6,14 @@ import { IS_LOGGED_IN } from './graphql/query/auth';
 import { useQuery, useApolloClient, useMutation, ApolloClient } from '@apollo/client';
 import authHelper from './authHelper';
 import { LOGIN_USER } from './graphql/mutations/auth';
+import { TOGGLE_TOAST } from './graphql/mutations/toast';
 
 const Auth: React.FC = (props): JSX.Element => {
     const { data } = useQuery(IS_LOGGED_IN);
+    const id = Math.floor(Math.random() * 100 + 1);
 
     const client: ApolloClient<unknown> = useApolloClient();
-    const [loginUser, { loading, error }] = useMutation<LoginData>(LOGIN_USER, {
+    const [loginUser] = useMutation<LoginData>(LOGIN_USER, {
         onCompleted({ login }) {
             localStorage.setItem('token', login.tokens.access_token);
             localStorage.setItem('user', JSON.stringify(login.user));
@@ -24,10 +26,23 @@ const Auth: React.FC = (props): JSX.Element => {
                 },
             });
         },
+        onError(err) {
+            const toast = {
+                id: id,
+                title: 'AUTHENTICATION ERROR',
+                message: err.message,
+                backgroundColor: 'error',
+            };
+
+            mutate({
+                variables: {
+                    toast: toast,
+                },
+            });
+        },
     });
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>An error occurred</p>;
+    const [mutate] = useMutation(TOGGLE_TOAST);
 
     const handleAuthentication = (e: React.FormEvent<HTMLFormElement>, email: string, password: string) => {
         e.preventDefault();
