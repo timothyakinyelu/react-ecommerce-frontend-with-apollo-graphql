@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import '../../styles/admin-login.css';
 import { AuthConsumer } from '../../authContext';
 
-function Login(): JSX.Element {
+const Login: React.FC = (): JSX.Element => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [hidden, setHidden] = useState<boolean>(true);
@@ -106,6 +106,6 @@ function Login(): JSX.Element {
             )}
         </AuthConsumer>
     );
-}
+};
 
 export default Login;
