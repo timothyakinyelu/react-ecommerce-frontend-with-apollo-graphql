@@ -33,8 +33,10 @@ const Routes: React.FC = (): JSX.Element => {
                 <div className="s-layout">
                     <SideBar />
                     <main className="s-layout__content">
-                        <Route path="/dashboard" component={Dashboard} />
-                        <Route path="/categories" component={Category} />
+                        <div id="analytics" className="tab-pane">
+                            <Route path="/dashboard" component={Dashboard} />
+                            <Route path="/categories" component={Category} />
+                        </div>
                     </main>
                 </div>
             </Fragment>

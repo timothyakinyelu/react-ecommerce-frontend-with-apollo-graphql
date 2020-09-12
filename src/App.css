@@ -17,13 +17,16 @@
     justify-content: center;
     align-items: center;
     flex: 1;
-    background-color: #e3e5e6;
+    background-color: #ebeff5
 }
 .headerBrand {
     width: 4em;
 }
 .s-layout__content {
     margin-left: 4em;
+}
+#analytics {
+    width: 61em;
 }
 button:focus {
     outline: unset;
