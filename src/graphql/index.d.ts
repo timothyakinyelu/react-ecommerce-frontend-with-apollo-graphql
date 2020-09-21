@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface User {
     id?: string;
     first_name?: string;
@@ -48,4 +49,14 @@ interface Toast {
 
 interface ToastState {
     toasts: Toast[];
+}
+
+interface __DataTableType__ {
+    allChecked?: boolean;
+    checkboxes?: any[];
+    current_page?: number;
+    last_page?: number;
+    to?: number;
+    total?: number;
+    message?: string;
 }

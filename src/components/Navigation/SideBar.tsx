@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../styles/sidebar.css';
+import { Link } from 'react-router-dom';
 
 const SideBar: React.FC = (): JSX.Element => {
     return (
@@ -26,7 +27,7 @@ const SideBar: React.FC = (): JSX.Element => {
                                 <a href="#">Brands</a>
                             </li>
                             <li>
-                                <a href="#">Categories</a>
+                                <Link to="categories">Categories</Link>
                             </li>
                             <li>
                                 <a href="#">Products</a>
