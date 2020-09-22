@@ -87,6 +87,7 @@ a {
     /* display: block; */
     background: #fff;
     border: 1px solid #e2e8f0;
+    border-left: 0;
     border-top: 0;
     border-bottom-right-radius: 0.5em;
 }
@@ -188,6 +189,11 @@ a {
     .s-sidebar__nav li:hover ul {
         /* display: block; */
         border-bottom-right-radius: 0;
+    }
+}
+@media (max-width: 42em) {
+    .s-layout__sidebar {
+        display: none;
     }
 }
   

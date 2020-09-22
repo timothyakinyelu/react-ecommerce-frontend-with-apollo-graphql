@@ -156,6 +156,10 @@ p.subtitle {
         padding: 0.9rem;
         visibility: visible;
     }
+    .profile-dropdown > label i {
+        position: relative;
+        top: -9px;
+    }
 }
 @media (min-width: 68em) {
     .profile-dropdown > label {
@@ -163,9 +167,9 @@ p.subtitle {
     }
     .profile-dropdown > label i {
         color: #4f28f0;
-        font-size: 1.75rem;
+        font-size: 1.3rem;
         position: relative;
-        top: -20px;
+        top: -14px;
     }
     .profile-dropdown ul {
         width: 100%;
