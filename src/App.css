@@ -13,7 +13,7 @@
     margin-top: 5em;
 }
 .s-layout__content {
-    display: flex;
+    display: block;
     justify-content: center;
     align-items: center;
     flex: 1;
@@ -24,9 +24,17 @@
 }
 .s-layout__content {
     margin-left: 4em;
+    padding: 20px;
+    padding-top: 1em;
 }
 #analytics {
-    width: 61em;
+    width: 100%;
+    height: auto;
+    background-color: #ffffff;
+    border-radius: 2em;
+}
+.inner-main {
+    padding: 20px;
 }
 button:focus {
     outline: unset;
@@ -41,5 +49,10 @@ button:focus {
     .headerBrand {
         width: 15em;
         padding: 1.6em;
+    }
+}
+@media (max-width: 42em) {
+    .s-layout__content {
+        margin-left: 0;
     }
 }
