@@ -236,7 +236,13 @@ const DataTable: React.FC<DataTableProps> = ({ items, changePage }): JSX.Element
         if (key !== 'id' && key !== 'isChecked' && key !== 'assigned' && key !== '__typename') {
             return (
                 <td data-label={peg} key={index}>
-                    {data[key]}
+                    {data[key] === true ? (
+                        <i className="fa fa-check"></i>
+                    ) : data[key] === false ? (
+                        <i className="fa fa-times"></i>
+                    ) : (
+                        data[key]
+                    )}
                 </td>
             );
         }
@@ -247,7 +253,7 @@ const DataTable: React.FC<DataTableProps> = ({ items, changePage }): JSX.Element
         if (items.data.length) {
             return stateObject?.checkboxes?.map((data, index: number) => {
                 return (
-                    <tr key={index}>
+                    <tr key={index} className="table-row">
                         <td>
                             <input
                                 type="checkbox"
@@ -260,7 +266,7 @@ const DataTable: React.FC<DataTableProps> = ({ items, changePage }): JSX.Element
                         </td>
                         {Object.keys(data).map((key, index) => showKey(key, index, data))}
                         {data.id && (
-                            <td>
+                            <td data-label="actions">
                                 <i
                                     className="mdi mdi-square-edit-outline btnDetail"
                                     data-label="edit"
@@ -272,6 +278,32 @@ const DataTable: React.FC<DataTableProps> = ({ items, changePage }): JSX.Element
                 );
             });
         }
+    };
+
+    const pageRange = (): any => {
+        const differential = items.pageData.perPage - 1;
+        const dataCount = items.pageData.perPage * items.pageData.currentPage;
+        const firstItem = dataCount - differential;
+
+        function prependZero(value: number): any {
+            if (value <= 9) {
+                return '0' + value;
+            } else {
+                return value;
+            }
+        }
+
+        const changedDataCount = prependZero(dataCount);
+        const changedFirstItem = prependZero(firstItem);
+        const changedTotal = prependZero(items?.pageData.total);
+
+        return (
+            <span className="pagination-total" style={{ marginTop: '8px' }}>
+                <i className="page-item">
+                    Showing {changedFirstItem} - {changedDataCount} of {changedTotal}
+                </i>
+            </span>
+        );
     };
 
     const pages = (): any => {
@@ -330,7 +362,7 @@ const DataTable: React.FC<DataTableProps> = ({ items, changePage }): JSX.Element
                 <table id="myTable" className="table responsive-table">
                     {/* <caption>{props.name} Data Table</caption> */}
                     <thead className="table-header">
-                        <tr>
+                        <tr className="">
                             {keys !== undefined && (
                                 <th>
                                     <input
@@ -348,48 +380,38 @@ const DataTable: React.FC<DataTableProps> = ({ items, changePage }): JSX.Element
                     </thead>
                     <tbody>{dataList()}</tbody>
                 </table>
+                {pageRange()}
                 {items?.pageData.lastPage !== undefined && items?.pageData.currentPage !== undefined
                     ? items?.pageData.lastPage >= items?.pageData.currentPage && (
-                          <nav style={{ float: 'right' }}>
+                          <nav className="tableNav">
                               <ul className="pagination">
                                   <li className="page-item">
-                                      <button
+                                      <i
                                           className={
-                                              1 === items?.pageData.currentPage ? 'page-link disabled' : 'page-link'
+                                              1 === items?.pageData.currentPage
+                                                  ? 'page-link disabled'
+                                                  : 'page-link fa fa-angle-left'
                                           }
-                                          disabled={1 === items?.pageData.currentPage}
                                           onClick={(): void => {
                                               if (items.pageData.currentPage === undefined) return;
                                               handlePageChange(items.pageData.currentPage - 1);
                                           }}
-                                      >
-                                          Previous
-                                      </button>
+                                      ></i>
                                   </li>
                                   {pageList()}
                                   <li className="page-item">
-                                      <button
+                                      <i
                                           className={
                                               items?.pageData.lastPage === items?.pageData.currentPage
                                                   ? 'page-link disabled'
-                                                  : 'page-link'
+                                                  : 'page-link fa fa-angle-right'
                                           }
-                                          disabled={items?.pageData.lastPage === items?.pageData.currentPage}
                                           onClick={(): void => {
                                               if (items.pageData.currentPage === undefined) return;
                                               handlePageChange(items.pageData.currentPage + 1);
                                           }}
-                                      >
-                                          Next
-                                      </button>
+                                      ></i>
                                   </li>
-                                  <span className="pagination-total" style={{ marginTop: '8px' }}>
-                                      {' '}
-                                      &nbsp;
-                                      <i>
-                                          Showing {items?.data?.length} of {items?.pageData.total} items.
-                                      </i>
-                                  </span>
                               </ul>
                           </nav>
                       )
